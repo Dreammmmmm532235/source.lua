@@ -1,82 +1,140 @@
+-- Récupère le ScreenGui et le Frame existants (doit être exécuté après le script principal)
 local player = game.Players.LocalPlayer
-local function getHumanoid()
-    if player.Character then
-        return player.Character:FindFirstChild("Humanoid")
-    end
-    return nil
-end
-local function createSpeedUI(parentFrame)
-    local speedLabel = Instance.new("TextLabel")
-    speedLabel.Name = "SpeedLabel"
-    speedLabel.Size = UDim2.new(0, 100, 0, 30)
-    speedLabel.Position = UDim2.new(0, 10, 0, 10)
-    speedLabel.BackgroundTransparency = 1
-    speedLabel.Text = "Walk Speed:"
-    speedLabel.TextColor3 = Color3.fromRGB(60, 60, 60)
-    speedLabel.TextSize = 14
-    speedLabel.Font = Enum.Font.SourceSans
-    speedLabel.Parent = parentFrame
+local screenGui = player:WaitForChild("PlayerGui"):WaitForChild("ScreenGui") -- Assure-toi que le ScreenGui existe
+local frame = screenGui:WaitForChild("Frame") -- Récupère le cadre principal
 
-    local speedInput = Instance.new("TextBox")
-    speedInput.Name = "SpeedInput"
-    speedInput.Size = UDim2.new(0, 60, 0, 30)
-    speedInput.Position = UDim2.new(0, 120, 0, 10)
-    speedInput.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
-    speedInput.Text = getHumanoid() and tostring(getHumanoid().WalkSpeed) or "16"
-    speedInput.TextColor3 = Color3.fromRGB(60, 60, 60)
-    speedInput.TextSize = 14
-    speedInput.Font = Enum.Font.SourceSans
-    speedInput.Parent = parentFrame
+-- Crée un cadre pour les onglets (à gauche)
+local tabFrame = Instance.new("Frame")
+tabFrame.Size = UDim2.new(0, 100, 1, -30) -- Hauteur = frame - barre de titre
+tabFrame.Position = UDim2.new(0, 0, 0, 30) -- Sous la barre de titre
+tabFrame.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
+tabFrame.BorderSizePixel = 0
+tabFrame.Parent = frame
 
-    local speedInputCorner = Instance.new("UICorner")
-    speedInputCorner.CornerRadius = UDim.new(0, 8)
-    speedInputCorner.Parent = speedInput
+local tabCorner = Instance.new("UICorner")
+tabCorner.CornerRadius = UDim.new(0, 10)
+tabCorner.Parent = tabFrame
 
-    local applyButton = Instance.new("TextButton")
-    applyButton.Name = "ApplyButton"
-    applyButton.Size = UDim2.new(0, 80, 0, 30)
-    applyButton.Position = UDim2.new(0, 190, 0, 10)
-    applyButton.BackgroundColor3 = Color3.fromRGB(39, 201, 63)
-    applyButton.Text = "Apply"
-    applyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    applyButton.TextSize = 14
-    applyButton.Font = Enum.Font.SourceSans
-    applyButton.Parent = parentFrame
+-- Crée un cadre pour le contenu des onglets (à droite)
+local contentFrame = Instance.new("Frame")
+contentFrame.Size = UDim2.new(0, 200, 1, -30)
+contentFrame.Position = UDim2.new(0, 100, 0, 30)
+contentFrame.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
+contentFrame.BorderSizePixel = 0
+contentFrame.Parent = frame
 
-    local applyButtonCorner = Instance.new("UICorner")
-    applyButtonCorner.CornerRadius = UDim.new(0, 8)
-    applyButtonCorner.Parent = applyButton
+local contentCorner = Instance.new("UICorner")
+contentCorner.CornerRadius = UDim.new(0, 10)
+contentCorner.Parent = contentFrame
 
-    player.CharacterAdded:Connect(function()
-        local humanoid = getHumanoid()
-        if humanoid then
-            speedInput.Text = tostring(humanoid.WalkSpeed)
-        end
-    end)
+-- Bouton pour l'onglet "Player"
+local playerTabButton = Instance.new("TextButton")
+playerTabButton.Size = UDim2.new(1, -10, 0, 40)
+playerTabButton.Position = UDim2.new(0, 5, 0, 5)
+playerTabButton.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+playerTabButton.Text = "Player"
+playerTabButton.TextColor3 = Color3.fromRGB(60, 60, 60)
+playerTabButton.Font = Enum.Font.SourceSansBold
+playerTabButton.TextSize = 18
+playerTabButton.Parent = tabFrame
 
-    applyButton.MouseButton1Click:Connect(function()
-        local humanoid = getHumanoid()
-        if humanoid then
-            local newSpeed = tonumber(speedInput.Text)
-            if newSpeed and newSpeed >= 0 then
-                humanoid.WalkSpeed = newSpeed
-                print("Vitesse modifiée à : " .. newSpeed)
-            else
-                warn("Entrez une vitesse valide (nombre positif)")
-            end
+local tabButtonCorner = Instance.new("UICorner")
+tabButtonCorner.CornerRadius = UDim.new(0, 5)
+tabButtonCorner.Parent = playerTabButton
+
+-- Contenu de l'onglet "Player"
+local playerContent = Instance.new("Frame")
+playerContent.Size = UDim2.new(1, 0, 1, 0)
+playerContent.Position = UDim2.new(0, 0, 0, 0)
+playerContent.BackgroundTransparency = 1
+playerContent.Visible = false -- Caché par défaut
+playerContent.Parent = contentFrame
+
+-- Label et champ pour la vitesse (WalkSpeed)
+local speedLabel = Instance.new("TextLabel")
+speedLabel.Size = UDim2.new(0, 180, 0, 20)
+speedLabel.Position = UDim2.new(0.5, -90, 0, 10)
+speedLabel.BackgroundTransparency = 1
+speedLabel.Text = "Vitesse (WalkSpeed)"
+speedLabel.TextColor3 = Color3.fromRGB(60, 60, 60)
+speedLabel.Font = Enum.Font.SourceSans
+speedLabel.TextSize = 16
+speedLabel.Parent = playerContent
+
+local speedInput = Instance.new("TextBox")
+speedInput.Size = UDim2.new(0, 100, 0, 30)
+speedInput.Position = UDim2.new(0.5, -50, 0, 35)
+speedInput.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+speedInput.Text = tostring(player.Character and player.Character.Humanoid.WalkSpeed or 16)
+speedInput.TextColor3 = Color3.fromRGB(0, 0, 0)
+speedInput.Font = Enum.Font.SourceSans
+speedInput.TextSize = 16
+speedInput.Parent = playerContent
+
+-- Label et champ pour le saut (JumpPower ou JumpHeight)
+local jumpLabel = Instance.new("TextLabel")
+jumpLabel.Size = UDim2.new(0, 180, 0, 20)
+jumpLabel.Position = UDim2.new(0.5, -90, 0, 75)
+jumpLabel.BackgroundTransparency = 1
+jumpLabel.Text = "Puissance de saut"
+jumpLabel.TextColor3 = Color3.fromRGB(60, 60, 60)
+jumpLabel.Font = Enum.Font.SourceSans
+jumpLabel.TextSize = 16
+jumpLabel.Parent = playerContent
+
+local jumpInput = Instance.new("TextBox")
+jumpInput.Size = UDim2.new(0, 100, 0, 30)
+jumpInput.Position = UDim2.new(0.5, -50, 0, 100)
+jumpInput.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+jumpInput.Text = tostring(player.Character and player.Character.Humanoid.JumpPower or 50)
+jumpInput.TextColor3 = Color3.fromRGB(0, 0, 0)
+jumpInput.Font = Enum.Font.SourceSans
+jumpInput.TextSize = 16
+jumpInput.Parent = playerContent
+
+-- Bouton pour appliquer les changements
+local applyButton = Instance.new("TextButton")
+applyButton.Size = UDim2.new(0, 100, 0, 30)
+applyButton.Position = UDim2.new(0.5, -50, 0, 140)
+applyButton.BackgroundColor3 = Color3.fromRGB(66, 133, 244) -- Bleu
+applyButton.Text = "Appliquer"
+applyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+applyButton.Font = Enum.Font.SourceSansBold
+applyButton.TextSize = 18
+applyButton.Parent = playerContent
+
+local applyCorner = Instance.new("UICorner")
+applyCorner.CornerRadius = UDim.new(0, 5)
+applyCorner.Parent = applyButton
+
+-- Fonction pour afficher l'onglet "Player"
+playerTabButton.MouseButton1Click:Connect(function()
+    playerContent.Visible = true
+    playerTabButton.BackgroundColor3 = Color3.fromRGB(66, 133, 244) -- Bleu quand actif
+end)
+
+-- Appliquer les modifications
+applyButton.MouseButton1Click:Connect(function()
+    local humanoid = player.Character and player.Character:FindFirstChild("Humanoid")
+    if humanoid then
+        local newSpeed = tonumber(speedInput.Text)
+        local newJump = tonumber(jumpInput.Text)
+        
+        if newSpeed then
+            humanoid.WalkSpeed = newSpeed
+            print("Vitesse mise à jour : " .. newSpeed)
         else
-            warn("Personnage non chargé")
+            print("Veuillez entrer un nombre valide pour la vitesse")
         end
-    end)
-end
-
-local playerGui = player:WaitForChild("PlayerGui")
-local screenGui = playerGui:WaitForChild("TabLoaderGUI", 5)
-if screenGui then
-    local contentFrame = screenGui:WaitForChild("Window"):WaitForChild("ContentFrame")
-    createSpeedUI(contentFrame)
-else
-    warn("TabLoaderGUI non trouvé !")
-end
-
-print("Script Player chargé !")
+        
+        if newJump then
+            humanoid.JumpPower = newJump -- Pour les anciennes versions
+            humanoid.JumpHeight = newJump / 7.5 -- Pour les nouvelles versions (approximation)
+            print("Puissance de saut mise à jour : " .. newJump)
+        else
+            print("Veuillez entrer un nombre valide pour le saut")
+        end
+    else
+        print("Personnage non trouvé !")
+    end
+end)
