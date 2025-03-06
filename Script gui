@@ -152,11 +152,11 @@ end
 -- Fonction pour créer un onglet
 local function createTab(name, contentFunction)
     local tabButton = Instance.new("TextButton")
-    tabButton.Size = UDim2.new(0, 50, 1, 0) -- Plus petit sans texte par défaut
+    tabButton.Size = UDim2.new(0, 50, 1, 0)
     tabButton.Position = UDim2.new(0, #tabs * 50, 0, 0)
     tabButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
     tabButton.BorderSizePixel = 0
-    tabButton.Text = name -- Nom défini ou vide
+    tabButton.Text = name
     tabButton.TextColor3 = Color3.fromRGB(60, 60, 60)
     tabButton.TextSize = 14
     tabButton.Font = Enum.Font.SourceSans
@@ -195,7 +195,7 @@ local function createTab(name, contentFunction)
     end
 end
 
--- Liste des liens GitHub (avec "Player" nommé, les autres sans nom)
+-- Liste des liens GitHub
 local githubLinks = {
     {Url = "https://raw.githubusercontent.com/Dreammmmmm532235/source.lua/refs/heads/main/Script%20player", Name = "Player"},
     {Url = "https://raw.githubusercontent.com/username/repo/main/tools.lua"},
@@ -211,7 +211,7 @@ for i, link in pairs(githubLinks) do
             return loadstring(game:HttpGet(link.Url))()
         end)
         if success then
-            createTab(link.Name or "", contentFunction) -- Utilise "Player" si défini, sinon ""
+            createTab(link.Name or "", contentFunction)
         else
             createTab(link.Name or "", function(container)
                 local errorLabel = Instance.new("TextLabel")
@@ -229,4 +229,4 @@ end
 -- Associe la fermeture au bouton rouge
 closeButton.MouseButton1Click:Connect(closeGUI)
 
-print("GUI Chrome-like créé avec onglets GitHub sans noms sauf Player !")
+print("GUI Chrome-like créé avec onglets GitHub !")
