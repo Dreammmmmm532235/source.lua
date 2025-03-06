@@ -4,7 +4,7 @@ return function(container)
     -- Label pour afficher le nom du joueur
     local playerLabel = Instance.new("TextLabel")
     playerLabel.Size = UDim2.new(1, 0, 0, 30)
-    playerLabel.Position = UDim2.new(0, 0, 0, 0)
+    playerLabel.Position = UDim2.new(0, 0, 0, 40) -- Décalé sous la barre de titre
     playerLabel.BackgroundTransparency = 1
     playerLabel.Text = "Joueur : " .. game.Players.LocalPlayer.Name
     playerLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
@@ -15,7 +15,7 @@ return function(container)
     -- Label pour la vitesse
     local speedLabel = Instance.new("TextLabel")
     speedLabel.Size = UDim2.new(0, 100, 0, 20)
-    speedLabel.Position = UDim2.new(0, 10, 0, 40)
+    speedLabel.Position = UDim2.new(0, 10, 0, 80)
     speedLabel.BackgroundTransparency = 1
     speedLabel.Text = "Vitesse :"
     speedLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
@@ -26,7 +26,7 @@ return function(container)
     -- Champ de texte pour la vitesse
     local speedBox = Instance.new("TextBox")
     speedBox.Size = UDim2.new(0, 100, 0, 30)
-    speedBox.Position = UDim2.new(0, 120, 0, 35)
+    speedBox.Position = UDim2.new(0, 120, 0, 75)
     speedBox.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
     speedBox.Text = "16"
     speedBox.TextColor3 = Color3.fromRGB(0, 0, 0)
@@ -45,7 +45,7 @@ return function(container)
             if character and character:FindFirstChild("Humanoid") then
                 local speed = tonumber(speedBox.Text)
                 if speed then
-                    character.Humanoid.WalkSpeed = math.clamp(speed, 0, 1000) -- Limite raisonnable
+                    character.Humanoid.WalkSpeed = math.clamp(speed, 0, 1000)
                 end
             end
         end
@@ -54,7 +54,7 @@ return function(container)
     -- Label pour le saut
     local jumpLabel = Instance.new("TextLabel")
     jumpLabel.Size = UDim2.new(0, 100, 0, 20)
-    jumpLabel.Position = UDim2.new(0, 10, 0, 75)
+    jumpLabel.Position = UDim2.new(0, 10, 0, 115)
     jumpLabel.BackgroundTransparency = 1
     jumpLabel.Text = "Saut :"
     jumpLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
@@ -65,7 +65,7 @@ return function(container)
     -- Champ de texte pour le saut
     local jumpBox = Instance.new("TextBox")
     jumpBox.Size = UDim2.new(0, 100, 0, 30)
-    jumpBox.Position = UDim2.new(0, 120, 0, 70)
+    jumpBox.Position = UDim2.new(0, 120, 0, 110)
     jumpBox.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
     jumpBox.Text = "50"
     jumpBox.TextColor3 = Color3.fromRGB(0, 0, 0)
@@ -84,7 +84,7 @@ return function(container)
             if character and character:FindFirstChild("Humanoid") then
                 local jump = tonumber(jumpBox.Text)
                 if jump then
-                    character.Humanoid.JumpPower = math.clamp(jump, 0, 1000) -- Limite raisonnable
+                    character.Humanoid.JumpPower = math.clamp(jump, 0, 1000)
                     if character.Humanoid.UseJumpPower == false then
                         character.Humanoid.JumpHeight = math.clamp(jump, 0, 1000)
                     end
@@ -96,7 +96,7 @@ return function(container)
     -- Bouton pour réinitialiser aux valeurs par défaut
     local defaultButton = Instance.new("TextButton")
     defaultButton.Size = UDim2.new(0, 150, 0, 40)
-    defaultButton.Position = UDim2.new(0, 10, 0, 110)
+    defaultButton.Position = UDim2.new(0, 10, 0, 150)
     defaultButton.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
     defaultButton.Text = "Par Défaut"
     defaultButton.TextColor3 = Color3.fromRGB(255, 255, 255)
