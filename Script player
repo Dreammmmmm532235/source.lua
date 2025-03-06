@@ -1,123 +1,94 @@
--- Script Player (à héberger sur GitHub : https://raw.githubusercontent.com/Dreammmmmm532235/source.lua/refs/heads/main/Script%20player)
+-- Script "player.lua" (à héberger, par exemple sur GitHub)
 
-return function(container)
-    -- Label pour afficher le nom du joueur
-    local playerLabel = Instance.new("TextLabel")
-    playerLabel.Size = UDim2.new(1, 0, 0, 30)
-    playerLabel.Position = UDim2.new(0, 0, 0, 40) -- Décalé sous la barre de titre
-    playerLabel.BackgroundTransparency = 1
-    playerLabel.Text = "Joueur : " .. game.Players.LocalPlayer.Name
-    playerLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
-    playerLabel.TextSize = 20
-    playerLabel.Font = Enum.Font.SourceSans
-    playerLabel.Parent = container
+local player = game.Players.LocalPlayer
 
-    -- Label pour la vitesse
+-- Attendre que le personnage soit chargé
+local function getHumanoid()
+    if player.Character then
+        return player.Character:FindFirstChild("Humanoid")
+    end
+    return nil
+end
+
+-- Créer une interface dans le ContentFrame du GUI parent
+local function createSpeedUI(parentFrame)
+    -- Label
     local speedLabel = Instance.new("TextLabel")
-    speedLabel.Size = UDim2.new(0, 100, 0, 20)
-    speedLabel.Position = UDim2.new(0, 10, 0, 80)
+    speedLabel.Name = "SpeedLabel"
+    speedLabel.Size = UDim2.new(0, 100, 0, 30)
+    speedLabel.Position = UDim2.new(0, 10, 0, 10)
     speedLabel.BackgroundTransparency = 1
-    speedLabel.Text = "Vitesse :"
-    speedLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
-    speedLabel.TextSize = 16
+    speedLabel.Text = "Walk Speed:"
+    speedLabel.TextColor3 = Color3.fromRGB(60, 60, 60)
+    speedLabel.TextSize = 14
     speedLabel.Font = Enum.Font.SourceSans
-    speedLabel.Parent = container
+    speedLabel.Parent = parentFrame
 
-    -- Champ de texte pour la vitesse
-    local speedBox = Instance.new("TextBox")
-    speedBox.Size = UDim2.new(0, 100, 0, 30)
-    speedBox.Position = UDim2.new(0, 120, 0, 75)
-    speedBox.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
-    speedBox.Text = "16"
-    speedBox.TextColor3 = Color3.fromRGB(0, 0, 0)
-    speedBox.TextSize = 16
-    speedBox.Font = Enum.Font.SourceSans
-    speedBox.Parent = container
+    -- Champ de saisie
+    local speedInput = Instance.new("TextBox")
+    speedInput.Name = "SpeedInput"
+    speedInput.Size = UDim2.new(0, 60, 0, 30)
+    speedInput.Position = UDim2.new(0, 120, 0, 10)
+    speedInput.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
+    speedInput.Text = getHumanoid() and tostring(getHumanoid().WalkSpeed) or "16"
+    speedInput.TextColor3 = Color3.fromRGB(60, 60, 60)
+    speedInput.TextSize = 14
+    speedInput.Font = Enum.Font.SourceSans
+    speedInput.Parent = parentFrame
 
-    local speedCorner = Instance.new("UICorner")
-    speedCorner.CornerRadius = UDim.new(0, 5)
-    speedCorner.Parent = speedBox
+    local speedInputCorner = Instance.new("UICorner")
+    speedInputCorner.CornerRadius = UDim.new(0, 8)
+    speedInputCorner.Parent = speedInput
 
-    -- Appliquer la vitesse entrée
-    speedBox.FocusLost:Connect(function(enterPressed)
-        if enterPressed then
-            local character = game.Players.LocalPlayer.Character
-            if character and character:FindFirstChild("Humanoid") then
-                local speed = tonumber(speedBox.Text)
-                if speed then
-                    character.Humanoid.WalkSpeed = math.clamp(speed, 0, 1000)
-                end
-            end
+    -- Bouton Appliquer
+    local applyButton = Instance.new("TextButton")
+    applyButton.Name = "ApplyButton"
+    applyButton.Size = UDim2.new(0, 80, 0, 30)
+    applyButton.Position = UDim2.new(0, 190, 0, 10)
+    applyButton.BackgroundColor3 = Color3.fromRGB(39, 201, 63)
+    applyButton.Text = "Apply"
+    applyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    applyButton.TextSize = 14
+    applyButton.Font = Enum.Font.SourceSans
+    applyButton.Parent = parentFrame
+
+    local applyButtonCorner = Instance.new("UICorner")
+    applyButtonCorner.CornerRadius = UDim.new(0, 8)
+    applyButtonCorner.Parent = applyButton
+
+    -- Mettre à jour la vitesse initiale quand le personnage charge
+    player.CharacterAdded:Connect(function()
+        local humanoid = getHumanoid()
+        if humanoid then
+            speedInput.Text = tostring(humanoid.WalkSpeed)
         end
     end)
 
-    -- Label pour le saut
-    local jumpLabel = Instance.new("TextLabel")
-    jumpLabel.Size = UDim2.new(0, 100, 0, 20)
-    jumpLabel.Position = UDim2.new(0, 10, 0, 115)
-    jumpLabel.BackgroundTransparency = 1
-    jumpLabel.Text = "Saut :"
-    jumpLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
-    jumpLabel.TextSize = 16
-    jumpLabel.Font = Enum.Font.SourceSans
-    jumpLabel.Parent = container
-
-    -- Champ de texte pour le saut
-    local jumpBox = Instance.new("TextBox")
-    jumpBox.Size = UDim2.new(0, 100, 0, 30)
-    jumpBox.Position = UDim2.new(0, 120, 0, 110)
-    jumpBox.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
-    jumpBox.Text = "50"
-    jumpBox.TextColor3 = Color3.fromRGB(0, 0, 0)
-    jumpBox.TextSize = 16
-    jumpBox.Font = Enum.Font.SourceSans
-    jumpBox.Parent = container
-
-    local jumpCorner = Instance.new("UICorner")
-    jumpCorner.CornerRadius = UDim.new(0, 5)
-    jumpCorner.Parent = jumpBox
-
-    -- Appliquer le saut entré
-    jumpBox.FocusLost:Connect(function(enterPressed)
-        if enterPressed then
-            local character = game.Players.LocalPlayer.Character
-            if character and character:FindFirstChild("Humanoid") then
-                local jump = tonumber(jumpBox.Text)
-                if jump then
-                    character.Humanoid.JumpPower = math.clamp(jump, 0, 1000)
-                    if character.Humanoid.UseJumpPower == false then
-                        character.Humanoid.JumpHeight = math.clamp(jump, 0, 1000)
-                    end
-                end
+    -- Appliquer la vitesse
+    applyButton.MouseButton1Click:Connect(function()
+        local humanoid = getHumanoid()
+        if humanoid then
+            local newSpeed = tonumber(speedInput.Text)
+            if newSpeed and newSpeed >= 0 then
+                humanoid.WalkSpeed = newSpeed
+                print("Vitesse modifiée à : " .. newSpeed)
+            else
+                warn("Entrez une vitesse valide (nombre positif)")
             end
-        end
-    end)
-
-    -- Bouton pour réinitialiser aux valeurs par défaut
-    local defaultButton = Instance.new("TextButton")
-    defaultButton.Size = UDim2.new(0, 150, 0, 40)
-    defaultButton.Position = UDim2.new(0, 10, 0, 150)
-    defaultButton.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
-    defaultButton.Text = "Par Défaut"
-    defaultButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    defaultButton.TextSize = 16
-    defaultButton.Font = Enum.Font.SourceSans
-    defaultButton.Parent = container
-
-    local defaultCorner = Instance.new("UICorner")
-    defaultCorner.CornerRadius = UDim.new(0, 5)
-    defaultCorner.Parent = defaultButton
-
-    defaultButton.MouseButton1Click:Connect(function()
-        local character = game.Players.LocalPlayer.Character
-        if character and character:FindFirstChild("Humanoid") then
-            character.Humanoid.WalkSpeed = 16
-            character.Humanoid.JumpPower = 50
-            if character.Humanoid.UseJumpPower == false then
-                character.Humanoid.JumpHeight = 7.2
-            end
-            speedBox.Text = "16"
-            jumpBox.Text = "50"
+        else
+            warn("Personnage non chargé")
         end
     end)
 end
+
+-- Trouver le ContentFrame du GUI parent
+local playerGui = player:WaitForChild("PlayerGui")
+local screenGui = playerGui:WaitForChild("TabLoaderGUI", 5)
+if screenGui then
+    local contentFrame = screenGui:WaitForChild("Window"):WaitForChild("ContentFrame")
+    createSpeedUI(contentFrame)
+else
+    warn("TabLoaderGUI non trouvé !")
+end
+
+print("Script Player chargé !")
