@@ -197,7 +197,7 @@ end
 
 -- Liste des liens GitHub
 local githubLinks = {
-    {Url = "https://raw.githubusercontent.com/Dreammmmmm532235/source.lua/refs/heads/main/Script%20player", Name = "Player"},
+    {Url = "https://raw.githubusercontent.com/Dreammmmmript%20player", Name = "Player"},
     {Url = "https://raw.githubusercontent.com/username/repo/main/tools.lua"},
     {Url = "https://raw.githubusercontent.com/username/repo/main/settings.lua"},
     {Url = "https://raw.githubusercontent.com/username/repo/main/chat.lua"},
