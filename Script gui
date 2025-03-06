@@ -133,3 +133,15 @@ end
 closeButton.MouseButton1Click:Connect(closeGUI)
 
 print("Fenêtre Chrome-like créée !")
+
+-- Charge le script Player depuis GitHub
+spawn(function()
+    local success, contentFunction = pcall(function()
+        return loadstring(game:HttpGet("https://raw.githubusercontent.com/Dreammmmmm532235/source.lua/refs/heads/main/Script%20player"))()
+    end)
+    if success then
+        contentFunction(frame) -- Applique le contenu directement dans la fenêtre
+    else
+        print("Erreur : Impossible de charger le script Player")
+    end
+end)
