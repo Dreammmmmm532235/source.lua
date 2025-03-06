@@ -195,16 +195,10 @@ local function createTab(name, contentFunction)
     end
 end
 
--- Liste des liens GitHub
-local githubLinks = {
-    {Url = "https://raw.githubusercontent.com/Dreammmmmript%20player", Name = "Player"},
-    {Url = "https://raw.githubusercontent.com/username/repo/main/tools.lua"},
-    {Url = "https://raw.githubusercontent.com/username/repo/main/settings.lua"},
-    {Url = "https://raw.githubusercontent.com/username/repo/main/chat.lua"},
-    {Url = "https://raw.githubusercontent.com/username/repo/main/stats.lua"}
-}
+-- Liste des liens GitHub (vide)
+local githubLinks = {}
 
--- Charge les onglets depuis les liens GitHub
+-- Charge les onglets depuis les liens GitHub (rien ne se passe si vide)
 for i, link in pairs(githubLinks) do
     spawn(function()
         local success, contentFunction = pcall(function()
@@ -229,4 +223,4 @@ end
 -- Associe la fermeture au bouton rouge
 closeButton.MouseButton1Click:Connect(closeGUI)
 
-print("GUI Chrome-like créé avec onglets GitHub !")
+print("GUI Chrome-like créé sans onglets !")
