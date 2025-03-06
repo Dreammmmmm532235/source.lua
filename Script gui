@@ -84,8 +84,8 @@ contentFrame.Parent = frame
 
 -- Liste des onglets et leurs liens
 local tabs = {
-    ["Player"] = "https://raw.githubusercontent.com/ZoiIntra/__Script/main/__Alchemy/__v3/loaders/311ad7329b80c2117f4bdbf46582dcc6.lua", -- Exemple (Blox Fruits)
-    ["Tools"] = "https://raw.githubusercontent.com/ZoiIntra/__Script/main/__Finded.lua" -- Exemple (script Alchemy)
+    ["Player"] = "https://raw.githubusercontent.com/Dreammmmmm532235/source.lua/refs/heads/main/Script%20player", -- Exemple (Blox Fruits)
+    ["Tools"] = "https://raw.githubusercontent.com/ZoiIntiinded.lua" -- Exemple (script Alchemy)
     -- Ajoute tes propres liens ici, par exemple :
     -- ["Speed"] = "https://ton-lien.com/speed.lua",
     -- ["Other"] = "https://ton-lien.com/other.lua"
