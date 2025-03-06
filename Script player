@@ -1,18 +1,11 @@
--- Script "player.lua" (à héberger, par exemple sur GitHub)
-
 local player = game.Players.LocalPlayer
-
--- Attendre que le personnage soit chargé
 local function getHumanoid()
     if player.Character then
         return player.Character:FindFirstChild("Humanoid")
     end
     return nil
 end
-
--- Créer une interface dans le ContentFrame du GUI parent
 local function createSpeedUI(parentFrame)
-    -- Label
     local speedLabel = Instance.new("TextLabel")
     speedLabel.Name = "SpeedLabel"
     speedLabel.Size = UDim2.new(0, 100, 0, 30)
@@ -24,7 +17,6 @@ local function createSpeedUI(parentFrame)
     speedLabel.Font = Enum.Font.SourceSans
     speedLabel.Parent = parentFrame
 
-    -- Champ de saisie
     local speedInput = Instance.new("TextBox")
     speedInput.Name = "SpeedInput"
     speedInput.Size = UDim2.new(0, 60, 0, 30)
@@ -40,7 +32,6 @@ local function createSpeedUI(parentFrame)
     speedInputCorner.CornerRadius = UDim.new(0, 8)
     speedInputCorner.Parent = speedInput
 
-    -- Bouton Appliquer
     local applyButton = Instance.new("TextButton")
     applyButton.Name = "ApplyButton"
     applyButton.Size = UDim2.new(0, 80, 0, 30)
@@ -56,7 +47,6 @@ local function createSpeedUI(parentFrame)
     applyButtonCorner.CornerRadius = UDim.new(0, 8)
     applyButtonCorner.Parent = applyButton
 
-    -- Mettre à jour la vitesse initiale quand le personnage charge
     player.CharacterAdded:Connect(function()
         local humanoid = getHumanoid()
         if humanoid then
@@ -64,7 +54,6 @@ local function createSpeedUI(parentFrame)
         end
     end)
 
-    -- Appliquer la vitesse
     applyButton.MouseButton1Click:Connect(function()
         local humanoid = getHumanoid()
         if humanoid then
@@ -81,7 +70,6 @@ local function createSpeedUI(parentFrame)
     end)
 end
 
--- Trouver le ContentFrame du GUI parent
 local playerGui = player:WaitForChild("PlayerGui")
 local screenGui = playerGui:WaitForChild("TabLoaderGUI", 5)
 if screenGui then
