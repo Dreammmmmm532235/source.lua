@@ -149,17 +149,14 @@ local function closeGUI()
     print("GUI fermé et scripts arrêtés")
 end
 
--- Fonction pour créer un onglet
-local function createTab(name, contentFunction)
+-- Fonction pour créer un onglet sans nom
+local function createTab(contentFunction)
     local tabButton = Instance.new("TextButton")
-    tabButton.Size = UDim2.new(0, 100, 1, 0)
-    tabButton.Position = UDim2.new(0, #tabs * 100, 0, 0)
+    tabButton.Size = UDim2.new(0, 50, 1, 0) -- Plus petit sans texte
+    tabButton.Position = UDim2.new(0, #tabs * 50, 0, 0)
     tabButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
     tabButton.BorderSizePixel = 0
-    tabButton.Text = name
-    tabButton.TextColor3 = Color3.fromRGB(60, 60, 60)
-    tabButton.TextSize = 14
-    tabButton.Font = Enum.Font.SourceSans
+    tabButton.Text = "" -- Pas de texte
     tabButton.Parent = tabBar
 
     local tabCorner = Instance.new("UICorner")
@@ -195,44 +192,29 @@ local function createTab(name, contentFunction)
     end
 end
 
--- Liste des liens GitHub (exemples, remplace-les par tes vrais liens)
+-- Liste des liens GitHub (sans noms affichés)
 local githubLinks = {
-    {
-        Name = "Player",
-        Url = "https://raw.githubusercontent.com/Dreammmmmm532235/source.lua/refs/heads/main/Script%20player"
-    },
-    {
-        Name = "Tools",
-        Url = "https://raw.githubusercontent.com/username/repo/main/tools.lua" -- Exemple
-    },
-    {
-        Name = "Settings",
-        Url = "https://raw.githubusercontent.com/username/repo/main/settings.lua" -- Exemple
-    },
-    {
-        Name = "Chat",
-        Url = "https://raw.githubusercontent.com/username/repo/main/chat.lua" -- Exemple
-    },
-    {
-        Name = "Stats",
-        Url = "https://raw.githubusercontent.com/username/repo/main/stats.lua" -- Exemple
-    }
+    "https://raw.githubusercontent.com/Dreammmmmm532235/source.lua/refs/heads/main/Script%20player",
+    "https://raw.githubusercontent.com/username/repo/main/tools.lua", -- Exemple
+    "https://raw.githubusercontent.com/username/repo/main/settings.lua", -- Exemple
+    "https://raw.githubusercontent.com/username/repo/main/chat.lua", -- Exemple
+    "https://raw.githubusercontent.com/username/repo/main/stats.lua" -- Exemple
 }
 
 -- Charge les onglets depuis les liens GitHub
-for _, link in pairs(githubLinks) do
+for i, url in pairs(githubLinks) do
     spawn(function()
         local success, contentFunction = pcall(function()
-            return loadstring(game:HttpGet(link.Url))()
+            return loadstring(game:HttpGet(url))()
         end)
         if success then
-            createTab(link.Name, contentFunction)
+            createTab(contentFunction)
         else
-            createTab(link.Name, function(container)
+            createTab(function(container)
                 local errorLabel = Instance.new("TextLabel")
                 errorLabel.Size = UDim2.new(1, 0, 1, 0)
                 errorLabel.BackgroundTransparency = 1
-                errorLabel.Text = "Erreur : Impossible de charger " .. link.Name
+                errorLabel.Text = "Erreur : Chargement échoué #" .. i
                 errorLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
                 errorLabel.TextSize = 16
                 errorLabel.Parent = container
@@ -244,4 +226,4 @@ end
 -- Associe la fermeture au bouton rouge
 closeButton.MouseButton1Click:Connect(closeGUI)
 
-print("GUI Chrome-like créé avec onglets GitHub !")
+print("GUI Chrome-like créé avec onglets GitHub sans noms !")
