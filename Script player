@@ -1,77 +1,92 @@
--- Fonction pour créer l'onglet Players
-local function createPlayersTab()
-    local tabButton = Instance.new("TextButton")
-    tabButton.Name = "TabPlayers"
-    tabButton.Size = UDim2.new(0, 100, 1, 0)
-    tabButton.Position = UDim2.new(0, 210, 0, 0) -- Position après Onglet 1 et 2 (si tu as suivi mon exemple)
-    tabButton.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
-    tabButton.BorderSizePixel = 0
-    tabButton.Text = "Players"
-    tabButton.TextColor3 = Color3.fromRGB(60, 60, 60)
-    tabButton.TextSize = 14
-    tabButton.Font = Enum.Font.SourceSans
-    tabButton.Parent = tabBar
+-- Script Player (à héberger sur GitHub, par exemple : https://raw.githubusercontent.com/Dreammmmmm532235/source.lua/refs/heads/main/Script%20player)
 
-    -- Contenu de l'onglet Players
-    local playersContent = Instance.new("Frame")
-    playersContent.Name = "PlayersContent"
-    playersContent.Size = UDim2.new(1, 0, 1, 0)
-    playersContent.Position = UDim2.new(0, 0, 0, 0)
-    playersContent.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
-    playersContent.BorderSizePixel = 0
-    playersContent.Parent = contentArea
-    playersContent.Visible = false -- Masqué par défaut
+return function(container)
+    -- Label pour afficher le nom du joueur
+    local playerLabel = Instance.new("TextLabel")
+    playerLabel.Size = UDim2.new(1, 0, 0, 30)
+    playerLabel.Position = UDim2.new(0, 0, 0, 0)
+    playerLabel.BackgroundTransparency = 1
+    playerLabel.Text = "Joueur : " .. game.Players.LocalPlayer.Name
+    playerLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+    playerLabel.TextSize = 20
+    playerLabel.Font = Enum.Font.SourceSans
+    playerLabel.Parent = container
 
-    -- Liste des joueurs avec défilement
-    local scrollingFrame = Instance.new("ScrollingFrame")
-    scrollingFrame.Size = UDim2.new(1, -10, 1, -10)
-    scrollingFrame.Position = UDim2.new(0, 5, 0, 5)
-    scrollingFrame.BackgroundTransparency = 1
-    scrollingFrame.ScrollBarThickness = 5
-    scrollingFrame.Parent = playersContent
+    -- Bouton pour augmenter la vitesse
+    local speedUpButton = Instance.new("TextButton")
+    speedUpButton.Size = UDim2.new(0, 150, 0, 40)
+    speedUpButton.Position = UDim2.new(0, 10, 0, 40)
+    speedUpButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+    speedUpButton.Text = "Vitesse + (32)"
+    speedUpButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    speedUpButton.TextSize = 16
+    speedUpButton.Font = Enum.Font.SourceSans
+    speedUpButton.Parent = container
 
-    -- Fonction pour mettre à jour la liste des joueurs
-    local function updatePlayerList()
-        -- Supprime les anciens éléments
-        for _, child in pairs(scrollingFrame:GetChildren()) do
-            if child:IsA("TextLabel") then
-                child:Destroy()
+    speedUpButton.MouseButton1Click:Connect(function()
+        local character = game.Players.LocalPlayer.Character
+        if character and character:FindFirstChild("Humanoid") then
+            character.Humanoid.WalkSpeed = 32
+        end
+    end)
+
+    -- Bouton pour réinitialiser la vitesse
+    local speedResetButton = Instance.new("TextButton")
+    speedResetButton.Size = UDim2.new(0, 150, 0, 40)
+    speedResetButton.Position = UDim2.new(0, 170, 0, 40)
+    speedResetButton.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
+    speedResetButton.Text = "Vitesse Normal (16)"
+    speedResetButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    speedResetButton.TextSize = 16
+    speedResetButton.Font = Enum.Font.SourceSans
+    speedResetButton.Parent = container
+
+    speedResetButton.MouseButton1Click:Connect(function()
+        local character = game.Players.LocalPlayer.Character
+        if character and character:FindFirstChild("Humanoid") then
+            character.Humanoid.WalkSpeed = 16
+        end
+    end)
+
+    -- Bouton pour augmenter le saut
+    local jumpUpButton = Instance.new("TextButton")
+    jumpUpButton.Size = UDim2.new(0, 150, 0, 40)
+    jumpUpButton.Position = UDim2.new(0, 10, 0, 90)
+    jumpUpButton.BackgroundColor3 = Color3.fromRGB(0, 191, 255)
+    jumpUpButton.Text = "Saut + (75)"
+    jumpUpButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    jumpUpButton.TextSize = 16
+    jumpUpButton.Font = Enum.Font.SourceSans
+    jumpUpButton.Parent = container
+
+    jumpUpButton.MouseButton1Click:Connect(function()
+        local character = game.Players.LocalPlayer.Character
+        if character and character:FindFirstChild("Humanoid") then
+            character.Humanoid.JumpPower = 75 -- Ancienne méthode (avant JumpHeight)
+            if character.Humanoid.UseJumpPower == false then
+                character.Humanoid.JumpHeight = 75 -- Nouvelle méthode
             end
         end
+    end)
 
-        -- Ajoute chaque joueur
-        local yOffset = 0
-        for i, plr in pairs(game.Players:GetPlayers()) do
-            local playerLabel = Instance.new("TextLabel")
-            playerLabel.Size = UDim2.new(1, 0, 0, 20)
-            playerLabel.Position = UDim2.new(0, 0, 0, yOffset)
-            playerLabel.BackgroundTransparency = 1
-            playerLabel.Text = plr.Name
-            playerLabel.TextColor3 = Color3.fromRGB(60, 60, 60)
-            playerLabel.TextSize = 14
-            playerLabel.Font = Enum.Font.SourceSans
-            playerLabel.TextXAlignment = Enum.TextXAlignment.Left
-            playerLabel.Parent = scrollingFrame
-            yOffset = yOffset + 25
+    -- Bouton pour réinitialiser le saut
+    local jumpResetButton = Instance.new("TextButton")
+    jumpResetButton.Size = UDim2.new(0, 150, 0, 40)
+    jumpResetButton.Position = UDim2.new(0, 170, 0, 90)
+    jumpResetButton.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
+    jumpResetButton.Text = "Saut Normal (50)"
+    jumpResetButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    jumpResetButton.TextSize = 16
+    jumpResetButton.Font = Enum.Font.SourceSans
+    jumpResetButton.Parent = container
+
+    jumpResetButton.MouseButton1Click:Connect(function()
+        local character = game.Players.LocalPlayer.Character
+        if character and character:FindFirstChild("Humanoid") then
+            character.Humanoid.JumpPower = 50 -- Valeur par défaut
+            if character.Humanoid.UseJumpPower == false then
+                character.Humanoid.JumpHeight = 7.2 -- Valeur par défaut pour JumpHeight
+            end
         end
-        scrollingFrame.CanvasSize = UDim2.new(0, 0, 0, yOffset)
-    end
-
-    -- Met à jour la liste au démarrage et quand un joueur rejoint/quitte
-    updatePlayerList()
-    game.Players.PlayerAdded:Connect(updatePlayerList)
-    game.Players.PlayerRemoving:Connect(updatePlayerList)
-
-    -- Gestion du clic sur l'onglet
-    tabButton.MouseButton1Click:Connect(function()
-        for _, content in pairs(contentArea:GetChildren()) do
-            content.Visible = false
-        end
-        playersContent.Visible = true
-        titleText.Text = "Players"
-        updatePlayerList() -- Rafraîchit la liste au clic
     end)
 end
-
--- Appelle la fonction pour créer l'onglet Players
-createPlayersTab()
