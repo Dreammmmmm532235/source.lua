@@ -86,32 +86,12 @@ local maximizeCorner = Instance.new("UICorner")
 maximizeCorner.CornerRadius = UDim.new(1, 0)
 maximizeCorner.Parent = maximizeButton
 
--- Zone pour les onglets
-local tabBar = Instance.new("Frame")
-tabBar.Name = "TabBar"
-tabBar.Size = UDim2.new(1, 0, 0, 30)
-tabBar.Position = UDim2.new(0, 0, 0, 30)
-tabBar.BackgroundColor3 = Color3.fromRGB(245, 245, 245)
-tabBar.BorderSizePixel = 0
-tabBar.Parent = frame
-
--- Zone de contenu
-local contentArea = Instance.new("Frame")
-contentArea.Name = "ContentArea"
-contentArea.Size = UDim2.new(1, 0, 0, 240)
-contentArea.Position = UDim2.new(0, 0, 0, 60)
-contentArea.BackgroundColor3 = Color3.fromRGB(250, 250, 250)
-contentArea.BorderSizePixel = 0
-contentArea.Parent = frame
-
 -- Gestion du déplacement
 local dragging
 local dragInput
 local startPos
 local startDrag
 local connections = {}
-local tabs = {}
-local currentTab = nil
 
 table.insert(connections, titleBar.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -146,81 +126,10 @@ local function closeGUI()
     end
     connections = {}
     screenGui.Enabled = false
-    print("GUI fermé et scripts arrêtés")
-end
-
--- Fonction pour créer un onglet
-local function createTab(name, contentFunction)
-    local tabButton = Instance.new("TextButton")
-    tabButton.Size = UDim2.new(0, 50, 1, 0)
-    tabButton.Position = UDim2.new(0, #tabs * 50, 0, 0)
-    tabButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
-    tabButton.BorderSizePixel = 0
-    tabButton.Text = name
-    tabButton.TextColor3 = Color3.fromRGB(60, 60, 60)
-    tabButton.TextSize = 14
-    tabButton.Font = Enum.Font.SourceSans
-    tabButton.Parent = tabBar
-
-    local tabCorner = Instance.new("UICorner")
-    tabCorner.CornerRadius = UDim.new(0, 5)
-    tabCorner.Parent = tabButton
-
-    -- Conteneur pour le contenu de l'onglet
-    local tabContent = Instance.new("Frame")
-    tabContent.Size = UDim2.new(1, 0, 1, 0)
-    tabContent.BackgroundTransparency = 1
-    tabContent.Visible = false
-    tabContent.Parent = contentArea
-
-    -- Exécute la fonction de contenu si fournie
-    if contentFunction then
-        contentFunction(tabContent)
-    end
-
-    -- Gestion du clic sur l'onglet
-    tabButton.MouseButton1Click:Connect(function()
-        if currentTab then
-            currentTab.Content.Visible = false
-            currentTab.Button.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
-        end
-        tabContent.Visible = true
-        tabButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        currentTab = {Button = tabButton, Content = tabContent}
-    end)
-
-    table.insert(tabs, {Button = tabButton, Content = tabContent})
-    if not currentTab then
-        tabButton:Activate() -- Active le premier onglet par défaut
-    end
-end
-
--- Liste des liens GitHub (vide)
-local githubLinks = {}
-
--- Charge les onglets depuis les liens GitHub (rien ne se passe si vide)
-for i, link in pairs(githubLinks) do
-    spawn(function()
-        local success, contentFunction = pcall(function()
-            return loadstring(game:HttpGet(link.Url))()
-        end)
-        if success then
-            createTab(link.Name or "", contentFunction)
-        else
-            createTab(link.Name or "", function(container)
-                local errorLabel = Instance.new("TextLabel")
-                errorLabel.Size = UDim2.new(1, 0, 1, 0)
-                errorLabel.BackgroundTransparency = 1
-                errorLabel.Text = "Erreur : Chargement échoué #" .. i
-                errorLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
-                errorLabel.TextSize = 16
-                errorLabel.Parent = container
-            end)
-        end
-    end)
+    print("GUI fermé")
 end
 
 -- Associe la fermeture au bouton rouge
 closeButton.MouseButton1Click:Connect(closeGUI)
 
-print("GUI Chrome-like créé sans onglets !")
+print("Fenêtre Chrome-like créée !")
