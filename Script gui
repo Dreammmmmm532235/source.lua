@@ -195,14 +195,7 @@ local function createTab(name, contentFunction)
     end
 end
 
--- Liste des liens GitHub (avec "Player" nommé, les autres sans nom)
-local githubLinks = {
-    {Url = "https://raw.githubusercontent.com/Dreammmmmm532235/source.lua/refs/heads/main/Script%20player", Name = "Player"},
-    {Url = "https://raw.githubusercontent.com/username/repo/main/tools.lua"},
-    {Url = "https://raw.githubusercontent.com/username/repo/main/settings.lua"},
-    {Url = "https://raw.githubusercontent.com/username/repo/main/chat.lua"},
-    {Url = "https://raw.githubusercontent.com/username/repo/main/stats.lua"}
-}
+
 
 -- Charge les onglets depuis les liens GitHub
 for i, link in pairs(githubLinks) do
