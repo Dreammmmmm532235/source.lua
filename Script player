@@ -1,0 +1,77 @@
+-- Fonction pour créer l'onglet Players
+local function createPlayersTab()
+    local tabButton = Instance.new("TextButton")
+    tabButton.Name = "TabPlayers"
+    tabButton.Size = UDim2.new(0, 100, 1, 0)
+    tabButton.Position = UDim2.new(0, 210, 0, 0) -- Position après Onglet 1 et 2 (si tu as suivi mon exemple)
+    tabButton.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+    tabButton.BorderSizePixel = 0
+    tabButton.Text = "Players"
+    tabButton.TextColor3 = Color3.fromRGB(60, 60, 60)
+    tabButton.TextSize = 14
+    tabButton.Font = Enum.Font.SourceSans
+    tabButton.Parent = tabBar
+
+    -- Contenu de l'onglet Players
+    local playersContent = Instance.new("Frame")
+    playersContent.Name = "PlayersContent"
+    playersContent.Size = UDim2.new(1, 0, 1, 0)
+    playersContent.Position = UDim2.new(0, 0, 0, 0)
+    playersContent.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
+    playersContent.BorderSizePixel = 0
+    playersContent.Parent = contentArea
+    playersContent.Visible = false -- Masqué par défaut
+
+    -- Liste des joueurs avec défilement
+    local scrollingFrame = Instance.new("ScrollingFrame")
+    scrollingFrame.Size = UDim2.new(1, -10, 1, -10)
+    scrollingFrame.Position = UDim2.new(0, 5, 0, 5)
+    scrollingFrame.BackgroundTransparency = 1
+    scrollingFrame.ScrollBarThickness = 5
+    scrollingFrame.Parent = playersContent
+
+    -- Fonction pour mettre à jour la liste des joueurs
+    local function updatePlayerList()
+        -- Supprime les anciens éléments
+        for _, child in pairs(scrollingFrame:GetChildren()) do
+            if child:IsA("TextLabel") then
+                child:Destroy()
+            end
+        end
+
+        -- Ajoute chaque joueur
+        local yOffset = 0
+        for i, plr in pairs(game.Players:GetPlayers()) do
+            local playerLabel = Instance.new("TextLabel")
+            playerLabel.Size = UDim2.new(1, 0, 0, 20)
+            playerLabel.Position = UDim2.new(0, 0, 0, yOffset)
+            playerLabel.BackgroundTransparency = 1
+            playerLabel.Text = plr.Name
+            playerLabel.TextColor3 = Color3.fromRGB(60, 60, 60)
+            playerLabel.TextSize = 14
+            playerLabel.Font = Enum.Font.SourceSans
+            playerLabel.TextXAlignment = Enum.TextXAlignment.Left
+            playerLabel.Parent = scrollingFrame
+            yOffset = yOffset + 25
+        end
+        scrollingFrame.CanvasSize = UDim2.new(0, 0, 0, yOffset)
+    end
+
+    -- Met à jour la liste au démarrage et quand un joueur rejoint/quitte
+    updatePlayerList()
+    game.Players.PlayerAdded:Connect(updatePlayerList)
+    game.Players.PlayerRemoving:Connect(updatePlayerList)
+
+    -- Gestion du clic sur l'onglet
+    tabButton.MouseButton1Click:Connect(function()
+        for _, content in pairs(contentArea:GetChildren()) do
+            content.Visible = false
+        end
+        playersContent.Visible = true
+        titleText.Text = "Players"
+        updatePlayerList() -- Rafraîchit la liste au clic
+    end)
+end
+
+-- Appelle la fonction pour créer l'onglet Players
+createPlayersTab()
