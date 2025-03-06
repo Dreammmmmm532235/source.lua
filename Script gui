@@ -1,186 +1,123 @@
--- LocalScript dans StarterGui
-
+-- Récupère le joueur
 local player = game.Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
-
--- Créer le ScreenGui
 local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "TabLoaderGUI"
-screenGui.Parent = playerGui
-screenGui.ResetOnSpawn = true
+screenGui.Parent = player:WaitForChild("PlayerGui")
 
--- Frame principal (fenêtre)
+-- Crée le cadre principal (fenêtre style Chrome)
 local frame = Instance.new("Frame")
-frame.Name = "Window"
-frame.Size = UDim2.new(0, 400, 0, 300)
-frame.Position = UDim2.new(0.5, -200, 0.5, -150)
-frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+frame.Size = UDim2.new(0, 300, 0, 200)
+frame.Position = UDim2.new(0.5, -150, 0.5, -100) -- Centré
+frame.BackgroundColor3 = Color3.fromRGB(240, 240, 240) -- Fond gris clair
 frame.BorderSizePixel = 0
 frame.Parent = screenGui
 
-local uiCorner = Instance.new("UICorner")
-uiCorner.CornerRadius = UDim.new(0, 8)
-uiCorner.Parent = frame
+-- Ajoute des coins arrondis (style Chrome)
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 10) -- Rayon de 10 pixels
+corner.Parent = frame
 
--- Barre de titre
+-- Barre de titre (style Chrome)
 local titleBar = Instance.new("Frame")
-titleBar.Name = "TitleBar"
 titleBar.Size = UDim2.new(1, 0, 0, 30)
-titleBar.Position = UDim2.new(0, 0, 0, 0)
-titleBar.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
+titleBar.BackgroundColor3 = Color3.fromRGB(230, 230, 230) -- Gris très clair
 titleBar.BorderSizePixel = 0
 titleBar.Parent = frame
 
 local titleCorner = Instance.new("UICorner")
-titleCorner.CornerRadius = UDim.new(0, 8)
+titleCorner.CornerRadius = UDim.new(0, 10)
 titleCorner.Parent = titleBar
 
-local titleText = Instance.new("TextLabel")
-titleText.Name = "Title"
-titleText.Size = UDim2.new(0.7, 0, 1, 0)
-titleText.Position = UDim2.new(0.05, 0, 0, 0)
-titleText.BackgroundTransparency = 1
-titleText.Text = "Tab Loader"
-titleText.TextColor3 = Color3.fromRGB(60, 60, 60)
-titleText.TextSize = 14
-titleText.Font = Enum.Font.SourceSans
-titleText.TextXAlignment = Enum.TextXAlignment.Left
-titleText.Parent = titleBar
-
--- Bouton Fermer
+-- Boutons de fenêtre (rouge, jaune, vert)
 local closeButton = Instance.new("TextButton")
-closeButton.Name = "CloseButton"
-closeButton.Size = UDim2.new(0, 20, 0, 20)
-closeButton.Position = UDim2.new(1, -25, 0, 5)
-closeButton.BackgroundColor3 = Color3.fromRGB(255, 95, 87)
+closeButton.Size = UDim2.new(0, 12, 0, 12)
+closeButton.Position = UDim2.new(0, 10, 0.5, -6)
+closeButton.BackgroundColor3 = Color3.fromRGB(255, 95, 87) -- Rouge
 closeButton.BorderSizePixel = 0
 closeButton.Text = ""
 closeButton.Parent = titleBar
-
 local closeCorner = Instance.new("UICorner")
-closeCorner.CornerRadius = UDim.new(1, 0)
+closeCorner.CornerRadius = UDim.new(1, 0) -- Cercle
 closeCorner.Parent = closeButton
 
--- Barre d'onglets
-local tabFrame = Instance.new("Frame")
-tabFrame.Name = "TabFrame"
-tabFrame.Size = UDim2.new(1, 0, 0, 30)
-tabFrame.Position = UDim2.new(0, 0, 0, 30)
-tabFrame.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
-tabFrame.BorderSizePixel = 0
-tabFrame.Parent = frame
+local minimizeButton = Instance.new("TextButton")
+minimizeButton.Size = UDim2.new(0, 12, 0, 12)
+minimizeButton.Position = UDim2.new(0, 28, 0.5, -6)
+minimizeButton.BackgroundColor3 = Color3.fromRGB(255, 189, 46) -- Jaune
+minimizeButton.BorderSizePixel = 0
+minimizeButton.Text = ""
+minimizeButton.Parent = titleBar
+local minCorner = Instance.new("UICorner")
+minCorner.CornerRadius = UDim.new(1, 0)
+minCorner.Parent = minimizeButton
 
-local tabCorner = Instance.new("UICorner")
-tabCorner.CornerRadius = UDim.new(0, 8)
-tabCorner.Parent = tabFrame
+local maximizeButton = Instance.new("TextButton")
+maximizeButton.Size = UDim2.new(0, 12, 0, 12)
+maximizeButton.Position = UDim2.new(0, 46, 0.5, -6)
+maximizeButton.BackgroundColor3 = Color3.fromRGB(39, 201, 63) -- Vert
+maximizeButton.BorderSizePixel = 0
+maximizeButton.Text = ""
+maximizeButton.Parent = titleBar
+local maxCorner = Instance.new("UICorner")
+maxCorner.CornerRadius = UDim.new(1, 0)
+maxCorner.Parent = maximizeButton
 
--- Zone de contenu (vide par défaut)
-local contentFrame = Instance.new("Frame")
-contentFrame.Name = "ContentFrame"
-contentFrame.Size = UDim2.new(1, 0, 1, -60)
-contentFrame.Position = UDim2.new(0, 0, 0, 60)
-contentFrame.BackgroundTransparency = 1
-contentFrame.Parent = frame
+-- Titre de la fenêtre
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(0, 200, 0, 30)
+titleLabel.Position = UDim2.new(0.5, -100, 0, 0)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Text = "Leina"
+titleLabel.TextColor3 = Color3.fromRGB(60, 60, 60)
+titleLabel.Font = Enum.Font.SourceSansBold
+titleLabel.TextSize = 18
+titleLabel.Parent = titleBar
 
--- Liste des onglets et leurs liens
-local tabs = {
-    ["Player"] = "https://raw.githubusercontent.com/Dreammmmmm532235/source.lua/refs/heads/main/Script%20player",
-    ["Tools"] = "https://raw.githubusercontent.com/Dreammmmmm532235/source.lua/refs/heads/main/Script%20player" -- Exemple, tu peux le remplacer plus tard
-}
+-- Fonctionnalités des boutons
+closeButton.MouseButton1Click:Connect(function()
+    screenGui:Destroy() -- Ferme la GUI
+end)
 
--- Gestion des connexions
-local connections = {}
-local currentTab = nil
+minimizeButton.MouseButton1Click:Connect(function()
+    frame.Visible = false -- Cache la fenêtre
+end)
 
--- Fonction pour charger un onglet
-local function loadTab(tabName)
-    if currentTab == tabName then return end
-    currentTab = tabName
-    
-    -- Effacer le contenu précédent
-    for _, child in pairs(contentFrame:GetChildren()) do
-        child:Destroy()
-    end
-    
-    -- Charger le script distant
-    local url = tabs[tabName]
-    if url then
-        pcall(function()
-            local success, result = pcall(function()
-                loadstring(game:HttpGet(url))()
-            end)
-            if not success then
-                warn("Erreur lors du chargement de l'onglet " .. tabName .. " : " .. result)
-            else
-                print("Onglet " .. tabName .. " chargé avec succès !")
-            end
-        end)
+maximizeButton.MouseButton1Click:Connect(function()
+    if frame.Size == UDim2.new(0, 300, 0, 200) then
+        frame.Size = UDim2.new(0, 400, 0, 300) -- Agrandit
+        frame.Position = UDim2.new(0.5, -200, 0.5, -150)
     else
-        warn("Aucun lien trouvé pour l'onglet " .. tabName)
+        frame.Size = UDim2.new(0, 300, 0, 200) -- Restaure
+        frame.Position = UDim2.new(0.5, -150, 0.5, -100)
     end
-end
+end)
 
--- Créer les boutons d'onglets
-local tabOffset = 5
-for tabName, _ in pairs(tabs) do
-    local tabButton = Instance.new("TextButton")
-    tabButton.Name = tabName .. "Button"
-    tabButton.Size = UDim2.new(0, 100, 1, 0)
-    tabButton.Position = UDim2.new(0, tabOffset, 0, 0)
-    tabButton.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
-    tabButton.Text = tabName
-    tabButton.TextColor3 = Color3.fromRGB(60, 60, 60)
-    tabButton.TextSize = 14
-    tabButton.Font = Enum.Font.SourceSans
-    tabButton.Parent = tabFrame
+-- Logique pour déplacer le GUI avec la souris
+local dragging = false
+local dragStart = nil
+local startPos = nil
 
-    local tabButtonCorner = Instance.new("UICorner")
-    tabButtonCorner.CornerRadius = UDim.new(0, 8)
-    tabButtonCorner.Parent = tabButton
-
-    tabButton.MouseButton1Click:Connect(function()
-        loadTab(tabName)
-        for _, btn in pairs(tabFrame:GetChildren()) do
-            if btn:IsA("TextButton") then
-                btn.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
-            end
-        end
-        tabButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255) -- Onglet actif
-    end)
-
-    tabOffset = tabOffset + 105
-end
-
--- Gestion du déplacement
-local dragging, startPos, startDrag
-table.insert(connections, titleBar.InputBegan:Connect(function(input)
+titleBar.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
         dragging = true
-        startPos = input.Position
-        startDrag = frame.Position
+        dragStart = input.Position
+        startPos = frame.Position
     end
-end))
+end)
 
-table.insert(connections, titleBar.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement and dragging then
-        local delta = input.Position - startPos
-        frame.Position = UDim2.new(startDrag.X.Scale, startDrag.X.Offset + delta.X, startDrag.Y.Scale, startDrag.Y.Offset + delta.Y)
+titleBar.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - dragStart
+        frame.Position = UDim2.new(
+            startPos.X.Scale,
+            startPos.X.Offset + delta.X,
+            startPos.Y.Scale,
+            startPos.Y.Offset + delta.Y
+        )
     end
-end))
+end)
 
-table.insert(connections, titleBar.InputEnded:Connect(function(input)
+titleBar.InputEnded:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
         dragging = false
     end
-end))
-
--- Fermer le GUI
-closeButton.MouseButton1Click:Connect(function()
-    for _, connection in pairs(connections) do
-        connection:Disconnect()
-    end
-    screenGui.Enabled = false
-    print("GUI fermé")
 end)
-
-print("Tab Loader GUI initialisé !")
