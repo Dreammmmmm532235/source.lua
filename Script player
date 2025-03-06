@@ -1,4 +1,4 @@
--- Script Player (à héberger sur GitHub, par exemple : https://raw.githubusercontent.com/Dreammmmmm532235/source.lua/refs/heads/main/Script%20player)
+-- Script Player (à héberger sur GitHub : https://raw.githubusercontent.com/Dreammmmmm532235/source.lua/refs/heads/main/Script%20player)
 
 return function(container)
     -- Label pour afficher le nom du joueur
@@ -12,81 +12,112 @@ return function(container)
     playerLabel.Font = Enum.Font.SourceSans
     playerLabel.Parent = container
 
-    -- Bouton pour augmenter la vitesse
-    local speedUpButton = Instance.new("TextButton")
-    speedUpButton.Size = UDim2.new(0, 150, 0, 40)
-    speedUpButton.Position = UDim2.new(0, 10, 0, 40)
-    speedUpButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-    speedUpButton.Text = "Vitesse + (32)"
-    speedUpButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    speedUpButton.TextSize = 16
-    speedUpButton.Font = Enum.Font.SourceSans
-    speedUpButton.Parent = container
+    -- Label pour la vitesse
+    local speedLabel = Instance.new("TextLabel")
+    speedLabel.Size = UDim2.new(0, 100, 0, 20)
+    speedLabel.Position = UDim2.new(0, 10, 0, 40)
+    speedLabel.BackgroundTransparency = 1
+    speedLabel.Text = "Vitesse :"
+    speedLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+    speedLabel.TextSize = 16
+    speedLabel.Font = Enum.Font.SourceSans
+    speedLabel.Parent = container
 
-    speedUpButton.MouseButton1Click:Connect(function()
-        local character = game.Players.LocalPlayer.Character
-        if character and character:FindFirstChild("Humanoid") then
-            character.Humanoid.WalkSpeed = 32
+    -- Champ de texte pour la vitesse
+    local speedBox = Instance.new("TextBox")
+    speedBox.Size = UDim2.new(0, 100, 0, 30)
+    speedBox.Position = UDim2.new(0, 120, 0, 35)
+    speedBox.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
+    speedBox.Text = "16"
+    speedBox.TextColor3 = Color3.fromRGB(0, 0, 0)
+    speedBox.TextSize = 16
+    speedBox.Font = Enum.Font.SourceSans
+    speedBox.Parent = container
+
+    local speedCorner = Instance.new("UICorner")
+    speedCorner.CornerRadius = UDim.new(0, 5)
+    speedCorner.Parent = speedBox
+
+    -- Appliquer la vitesse entrée
+    speedBox.FocusLost:Connect(function(enterPressed)
+        if enterPressed then
+            local character = game.Players.LocalPlayer.Character
+            if character and character:FindFirstChild("Humanoid") then
+                local speed = tonumber(speedBox.Text)
+                if speed then
+                    character.Humanoid.WalkSpeed = math.clamp(speed, 0, 1000) -- Limite raisonnable
+                end
+            end
         end
     end)
 
-    -- Bouton pour réinitialiser la vitesse
-    local speedResetButton = Instance.new("TextButton")
-    speedResetButton.Size = UDim2.new(0, 150, 0, 40)
-    speedResetButton.Position = UDim2.new(0, 170, 0, 40)
-    speedResetButton.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
-    speedResetButton.Text = "Vitesse Normal (16)"
-    speedResetButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    speedResetButton.TextSize = 16
-    speedResetButton.Font = Enum.Font.SourceSans
-    speedResetButton.Parent = container
+    -- Label pour le saut
+    local jumpLabel = Instance.new("TextLabel")
+    jumpLabel.Size = UDim2.new(0, 100, 0, 20)
+    jumpLabel.Position = UDim2.new(0, 10, 0, 75)
+    jumpLabel.BackgroundTransparency = 1
+    jumpLabel.Text = "Saut :"
+    jumpLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+    jumpLabel.TextSize = 16
+    jumpLabel.Font = Enum.Font.SourceSans
+    jumpLabel.Parent = container
 
-    speedResetButton.MouseButton1Click:Connect(function()
+    -- Champ de texte pour le saut
+    local jumpBox = Instance.new("TextBox")
+    jumpBox.Size = UDim2.new(0, 100, 0, 30)
+    jumpBox.Position = UDim2.new(0, 120, 0, 70)
+    jumpBox.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
+    jumpBox.Text = "50"
+    jumpBox.TextColor3 = Color3.fromRGB(0, 0, 0)
+    jumpBox.TextSize = 16
+    jumpBox.Font = Enum.Font.SourceSans
+    jumpBox.Parent = container
+
+    local jumpCorner = Instance.new("UICorner")
+    jumpCorner.CornerRadius = UDim.new(0, 5)
+    jumpCorner.Parent = jumpBox
+
+    -- Appliquer le saut entré
+    jumpBox.FocusLost:Connect(function(enterPressed)
+        if enterPressed then
+            local character = game.Players.LocalPlayer.Character
+            if character and character:FindFirstChild("Humanoid") then
+                local jump = tonumber(jumpBox.Text)
+                if jump then
+                    character.Humanoid.JumpPower = math.clamp(jump, 0, 1000) -- Limite raisonnable
+                    if character.Humanoid.UseJumpPower == false then
+                        character.Humanoid.JumpHeight = math.clamp(jump, 0, 1000)
+                    end
+                end
+            end
+        end
+    end)
+
+    -- Bouton pour réinitialiser aux valeurs par défaut
+    local defaultButton = Instance.new("TextButton")
+    defaultButton.Size = UDim2.new(0, 150, 0, 40)
+    defaultButton.Position = UDim2.new(0, 10, 0, 110)
+    defaultButton.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
+    defaultButton.Text = "Par Défaut"
+    defaultButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    defaultButton.TextSize = 16
+    defaultButton.Font = Enum.Font.SourceSans
+    defaultButton.Parent = container
+
+    local defaultCorner = Instance.new("UICorner")
+    defaultCorner.CornerRadius = UDim.new(0, 5)
+    defaultCorner.Parent = defaultButton
+
+    defaultButton.MouseButton1Click:Connect(function()
         local character = game.Players.LocalPlayer.Character
         if character and character:FindFirstChild("Humanoid") then
             character.Humanoid.WalkSpeed = 16
-        end
-    end)
-
-    -- Bouton pour augmenter le saut
-    local jumpUpButton = Instance.new("TextButton")
-    jumpUpButton.Size = UDim2.new(0, 150, 0, 40)
-    jumpUpButton.Position = UDim2.new(0, 10, 0, 90)
-    jumpUpButton.BackgroundColor3 = Color3.fromRGB(0, 191, 255)
-    jumpUpButton.Text = "Saut + (75)"
-    jumpUpButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    jumpUpButton.TextSize = 16
-    jumpUpButton.Font = Enum.Font.SourceSans
-    jumpUpButton.Parent = container
-
-    jumpUpButton.MouseButton1Click:Connect(function()
-        local character = game.Players.LocalPlayer.Character
-        if character and character:FindFirstChild("Humanoid") then
-            character.Humanoid.JumpPower = 75 -- Ancienne méthode (avant JumpHeight)
+            character.Humanoid.JumpPower = 50
             if character.Humanoid.UseJumpPower == false then
-                character.Humanoid.JumpHeight = 75 -- Nouvelle méthode
+                character.Humanoid.JumpHeight = 7.2
             end
-        end
-    end)
-
-    -- Bouton pour réinitialiser le saut
-    local jumpResetButton = Instance.new("TextButton")
-    jumpResetButton.Size = UDim2.new(0, 150, 0, 40)
-    jumpResetButton.Position = UDim2.new(0, 170, 0, 90)
-    jumpResetButton.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
-    jumpResetButton.Text = "Saut Normal (50)"
-    jumpResetButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    jumpResetButton.TextSize = 16
-    jumpResetButton.Font = Enum.Font.SourceSans
-    jumpResetButton.Parent = container
-
-    jumpResetButton.MouseButton1Click:Connect(function()
-        local character = game.Players.LocalPlayer.Character
-        if character and character:FindFirstChild("Humanoid") then
-            character.Humanoid.JumpPower = 50 -- Valeur par défaut
-            if character.Humanoid.UseJumpPower == false then
-                character.Humanoid.JumpHeight = 7.2 -- Valeur par défaut pour JumpHeight
-            end
+            speedBox.Text = "16"
+            jumpBox.Text = "50"
         end
     end)
 end
