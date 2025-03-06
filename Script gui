@@ -1,0 +1,136 @@
+-- LocalScript dans StarterGui
+
+local player = game.Players.LocalPlayer
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "ChromeLikeGUI"
+screenGui.Parent = player:WaitForChild("PlayerGui")
+screenGui.ResetOnSpawn = true
+
+-- Frame principal (fenêtre)
+local frame = Instance.new("Frame")
+frame.Name = "Window"
+frame.Size = UDim2.new(0, 400, 0, 300)
+frame.Position = UDim2.new(0.5, -200, 0.5, -150)
+frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+frame.BorderSizePixel = 0
+frame.Parent = screenGui
+
+local uiCorner = Instance.new("UICorner")
+uiCorner.CornerRadius = UDim.new(0, 8)
+uiCorner.Parent = frame
+
+-- Barre de titre
+local titleBar = Instance.new("Frame")
+titleBar.Name = "TitleBar"
+titleBar.Size = UDim2.new(1, 0, 0, 30)
+titleBar.Position = UDim2.new(0, 0, 0, 0)
+titleBar.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
+titleBar.BorderSizePixel = 0
+titleBar.Parent = frame
+
+local titleCorner = Instance.new("UICorner")
+titleCorner.CornerRadius = UDim.new(0, 8)
+titleCorner.Parent = titleBar
+
+local titleText = Instance.new("TextLabel")
+titleText.Name = "Title"
+titleText.Size = UDim2.new(0.7, 0, 1, 0)
+titleText.Position = UDim2.new(0.05, 0, 0, 0)
+titleText.BackgroundTransparency = 1
+titleText.Text = "Nouvel Onglet"
+titleText.TextColor3 = Color3.fromRGB(60, 60, 60)
+titleText.TextSize = 14
+titleText.Font = Enum.Font.SourceSans
+titleText.TextXAlignment = Enum.TextXAlignment.Left
+titleText.Parent = titleBar
+
+-- Bouton Fermer (rouge)
+local closeButton = Instance.new("TextButton")
+closeButton.Name = "CloseButton"
+closeButton.Size = UDim2.new(0, 20, 0, 20)
+closeButton.Position = UDim2.new(1, -25, 0, 5)
+closeButton.BackgroundColor3 = Color3.fromRGB(255, 95, 87)
+closeButton.BorderSizePixel = 0
+closeButton.Text = ""
+closeButton.Parent = titleBar
+
+local closeCorner = Instance.new("UICorner")
+closeCorner.CornerRadius = UDim.new(1, 0)
+closeCorner.Parent = closeButton
+
+-- Bouton Réduire (jaune)
+local minimizeButton = Instance.new("TextButton")
+minimizeButton.Name = "MinimizeButton"
+minimizeButton.Size = UDim2.new(0, 20, 0, 20)
+minimizeButton.Position = UDim2.new(1, -50, 0, 5)
+minimizeButton.BackgroundColor3 = Color3.fromRGB(255, 189, 46)
+minimizeButton.BorderSizePixel = 0
+minimizeButton.Text = ""
+minimizeButton.Parent = titleBar
+
+local minimizeCorner = Instance.new("UICorner")
+minimizeCorner.CornerRadius = UDim.new(1, 0)
+minimizeCorner.Parent = minimizeButton
+
+-- Bouton Agrandir (vert)
+local maximizeButton = Instance.new("TextButton")
+maximizeButton.Name = "MaximizeButton"
+maximizeButton.Size = UDim2.new(0, 20, 0, 20)
+maximizeButton.Position = UDim2.new(1, -75, 0, 5)
+maximizeButton.BackgroundColor3 = Color3.fromRGB(39, 201, 63)
+maximizeButton.BorderSizePixel = 0
+maximizeButton.Text = ""
+maximizeButton.Parent = titleBar
+
+local maximizeCorner = Instance.new("UICorner")
+maximizeCorner.CornerRadius = UDim.new(1, 0)
+maximizeCorner.Parent = maximizeButton
+
+-- Gestion du déplacement (stockage des connexions pour pouvoir les déconnecter)
+local dragging
+local dragInput
+local startPos
+local startDrag
+local connections = {} -- Tableau pour stocker les connexions
+
+table.insert(connections, titleBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        startPos = input.Position
+        startDrag = frame.Position
+    end
+end))
+
+table.insert(connections, titleBar.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement and dragging then
+        local delta = input.Position - startPos
+        frame.Position = UDim2.new(
+            startDrag.X.Scale,
+            startDrag.X.Offset + delta.X,
+            startDrag.Y.Scale,
+            startDrag.Y.Offset + delta.Y
+        )
+    end
+end))
+
+table.insert(connections, titleBar.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
+end))
+
+-- Fonction pour fermer le GUI et arrêter les connexions
+local function closeGUI()
+    -- Déconnecte tous les événements stockés
+    for _, connection in pairs(connections) do
+        connection:Disconnect()
+    end
+    connections = {} -- Vide le tableau
+    screenGui.Enabled = false -- Désactive le GUI
+    print("GUI fermé et scripts arrêtés")
+end
+
+-- Associe la fermeture au bouton rouge
+closeButton.MouseButton1Click:Connect(closeGUI)
+
+print("GUI Chrome-like créé !")
