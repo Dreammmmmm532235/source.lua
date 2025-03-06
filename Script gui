@@ -85,7 +85,7 @@ contentFrame.Parent = frame
 -- Liste des onglets et leurs liens
 local tabs = {
     ["Player"] = "https://raw.githubusercontent.com/Dreammmmmm532235/source.lua/refs/heads/main/Script%20player",
-    ["Tools"] = "https://raw.githubusercontent.com/ZoiIntra/__Script/main/__Finded.lua" -- Exemple, tu peux le remplacer plus tard
+    ["Tools"] = "https://raw.githubusercontent.com/Dreammmmmm532235/source.lua/refs/heads/main/Script%20player" -- Exemple, tu peux le remplacer plus tard
 }
 
 -- Gestion des connexions
